@@ -1,0 +1,11 @@
+---
+- name: Provisioning
+  hosts: localhost
+  connection: local
+  become: true
+  roles:
+     - common
+     - apt-update
+     - anyenv
+     - docker
+     - mongo

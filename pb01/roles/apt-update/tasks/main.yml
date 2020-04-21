@@ -1,0 +1,6 @@
+---
+## パッケージの更新
+- name: apt update
+  apt:
+    upgrade: dist
+

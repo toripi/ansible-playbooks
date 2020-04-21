@@ -1,0 +1,68 @@
+---
+## タイムゾーンの設定
+- name: set timezone
+  timezone:
+    name: Asia/Tokyo
+
+## ロケールの設定
+- name:
+  locale_gen:
+    name: ja_JP.UTF-8
+    state: present
+
+- name: set locale
+  command: localectl set-locale LANG=ja_JP.UTF-8
+  when: ansible_env.LANG != 'ja_JP.UTF-8'
+
+## inputrc設定
+- name: configure inputrcvi
+  copy:
+    src: roles/common/files/inputrc
+    dest: /home/vagrant/.inputrc
+    group: vagrant
+    owner: vagrant
+    mode: 0644
+
+## Vi設定
+- name: configure vi
+  copy:
+    src: roles/common/files/vimrc
+    dest: /home/vagrant/.vimrc
+    group: vagrant
+    owner: vagrant
+    mode: 0644
+
+## パッケージ更新
+#- name: apt update
+#  apt:
+#    upgrade: dist
+
+## 追加インストール
+- name: apt install
+  apt:
+    name: 
+      - vim
+      - bzip2
+      - curl
+      - git
+    state: present
+
+## pyenv pre-install
+- name: pyenv pre-install
+  apt:
+    name: 
+      - gcc
+      - make
+      - libssl-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - zlib1g-dev
+      - libffi-dev
+    state: present
+
+## xauthインストール
+- name: xauth install
+  apt:
+    name: xauth
+    state: present

@@ -1,0 +1,50 @@
+---
+## Install anyenv
+- name: Anyenv
+  block:
+    - name: install anyenv
+      git:
+        repo: https://github.com/anyenv/anyenv.git
+        dest: "/home/{{user}}/.anyenv"
+
+    - name: install anyenv-update
+      git:
+        repo: https://github.com/znz/anyenv-update.git
+        dest: "/home/{{user}}/.anyenv/plugins/anyenv-update"
+
+    - name: check init 
+      stat:
+        path: "/home/{{user}}/.config/anyenv"
+      register: st
+
+    - name: create manifest
+      command: '"/home/{{user}}/.anyenv/bin/anyenv" install --force-init'
+      when: st.stat.islnk is not defined
+
+    - name: check install pyenv
+      stat:
+        path: "/home/{{user}}/.anyenv/envs/pyenv"
+      register: pyst
+
+    - name: install pyenv
+      block:
+        - shell: eval "$(/home/{{user}}/.anyenv/bin/anyenv init -)"
+        - shell: /home/{{user}}/.anyenv/bin/anyenv install pyenv
+      when: pyst.stat.islnk is not defined
+    
+    - name: install pyenv-virtualenv
+      git:
+        repo: https://github.com/yyuu/pyenv-virtualenv.git
+        dest: "/home/{{user}}/.anyenv/envs/pyenv/plugins/pyenv-virtualenv"
+    
+    - name: config anyenv
+      lineinfile:
+        path: "/home/{{user}}/.bashrc"
+        line: "{{item}}"
+      with_items:
+          - 'export PATH="${HOME}/.anyenv/bin:${PATH}"'
+          - 'eval "$(anyenv init -)"'
+          - 'eval "$(pyenv virtualenv-init -)"'
+
+  become_user: "{{user}}"
+

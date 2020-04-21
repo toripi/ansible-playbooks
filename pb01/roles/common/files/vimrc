@@ -1,0 +1,13 @@
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set autoindent
+set nobackup
+set helplang=ja,en
+set encoding=utf-8
+set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
+set belloff=all
+" ステータスライン表示設定
+set statusline=[%F]%r%m%h%=[%{&fenc!=''?&fenc:&enc}][%{&ff}][%Y]%l,%L%8P
+" ステータスラインを常に表示 (0:表示しない 1:2以上ウィンドウがある時だけ表示)
+set laststatus=2
